@@ -1,5 +1,8 @@
 todo.md
-*skaffold
+*skaffold*
+logs*
+*minikube*
+*kubectl*
 
 # https://github.com/microsoft/TypeScript-Node-Starter/blob/master/.gitignore
 
