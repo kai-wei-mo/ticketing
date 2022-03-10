@@ -1,28 +1,29 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
+import { RequestValidationError } from '../errors/requestValidationError';
+import { DatabaseConnectionError } from '../errors/databaseConnectionError';
 
 const router = express.Router();
 
 router.post(
 	'/api/users/signup',
 	[
-		body('email')
-			.isEmail()
-			.withMessage('Please enter a valid email address'),
+		body('email').isEmail().withMessage('Email must be valid'),
 		body('password')
 			.trim()
 			.isLength({ min: 4, max: 20 })
-			.withMessage('Please enter a password between 4 and 20 characters'),
+			.withMessage('Password must be between 4 and 20 characters'),
 	],
 	(req: Request, res: Response) => {
 		const errors = validationResult(req);
 
 		if (!errors.isEmpty()) {
-			return res.status(400).json({ errors: errors.array() });
+			throw new RequestValidationError(errors.array());
 		}
+		console.log('Creating a user...');
+		throw new DatabaseConnectionError();
 
-		console.log('hello from signup');
-		res.send('hello from signup');
+		res.send({});
 	}
 );
 
